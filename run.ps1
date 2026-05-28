@@ -1,3 +1,7 @@
+param(
+    [string]$TargetScript = "test.py"
+)
+
 $ErrorActionPreference = "Stop"
 
 if (Test-Path -LiteralPath results) {
@@ -32,4 +36,14 @@ if (-not $pythonExe) {
 }
 
 Write-Output "Using Python: $pythonExe"
-& $pythonExe test.py
+
+if ($TargetScript -match '(^|[\\/])\.\.([\\/]|$)') {
+    throw "Target script must stay inside the project: $TargetScript"
+}
+
+if (!(Test-Path -LiteralPath $TargetScript)) {
+    throw "Target script not found: $TargetScript"
+}
+
+Write-Output "Running Python script: $TargetScript"
+& $pythonExe $TargetScript
