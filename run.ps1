@@ -1,5 +1,8 @@
 $ErrorActionPreference = "Stop"
 
+if (Test-Path -LiteralPath results) {
+    Remove-Item -LiteralPath results -Recurse -Force
+}
 New-Item -ItemType Directory -Force -Path results | Out-Null
 
 $pythonCandidates = @(
